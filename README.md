@@ -1,253 +1,161 @@
-# PostureGuard-AI-Human-Posture-Analysis-Web-Platform
+# PostureGuard-AI-Posture-Correction-Web-App
 
-A cutting-edge web platform that employs sophisticated AI and real-time computer vision to meticulously analyze human posture from webcam feeds. PostureGuard provides instant, actionable feedback to promote enhanced health and ergonomic well-being.
+[![Build Status](https://img.shields.io/github/actions/workflow/status/chirag127/PostureGuard-AI-Posture-Correction-Web-App/ci.yml?label=Build&style=flat-square)](https://github.com/chirag127/PostureGuard-AI-Posture-Correction-Web-App/actions/workflows/ci.yml)
+[![Code Coverage](https://img.shields.io/codecov/c/github/chirag127/PostureGuard-AI-Posture-Correction-Web-App?style=flat-square)](https://codecov.io/gh/chirag127/PostureGuard-AI-Posture-Correction-Web-App)
+[![License](https://img.shields.io/github/license/chirag127/PostureGuard-AI-Posture-Correction-Web-App?style=flat-square)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/chirag127/PostureGuard-AI-Posture-Correction-Web-App?style=flat-square)](https://github.com/chirag127/PostureGuard-AI-Posture-Correction-Web-App)
 
-[![Build Status](https://img.shields.io/github/actions/workflow/user/YOUR_USERNAME/YOUR_REPO/main.yml?style=flat-square&logo=githubactions&label=CI%2FCD)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions)
-[![Code Coverage](https://img.shields.io/codecov/c/github/YOUR_USERNAME/YOUR_REPO?style=flat-square&logo=codecov)](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPO)
-[![Tech Stack](https://img.shields.io/badge/TypeScript-Vite-Tauri-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/github/license/YOUR_USERNAME/YOUR_REPO?style=flat-square&logo=opensourceinitiative)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/YOUR_USERNAME/YOUR_REPO?style=flat-square&logo=semantic-release)](https://github.com/YOUR_USERNAME/YOUR_REPO/releases)
+[![Tech Stack](https://img.shields.io/badge/Stack-TypeScript%20%7C%20React%20%7C%20Tauri%20v2-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Linter/Formatter](https://img.shields.io/badge/Linter-Biome-green?style=flat-square&logo=biome)](https://biomejs.dev/)
 
---- 
+[⭐ Star ⭐ this Repo if you find it useful for promoting ergonomic health!]("https://github.com/chirag127/PostureGuard-AI-Posture-Correction-Web-App")
 
-## ✨ Features
+---
 
-*   **Real-time Posture Analysis:** Utilizes advanced computer vision models to track and analyze posture from live webcam input.
-*   **AI-Powered Feedback:** Delivers immediate, intelligent, and actionable insights for posture correction.
-*   **Ergonomic Guidance:** Provides recommendations for optimal workspace setup and healthy sitting/standing habits.
-*   **Health & Well-being Focus:** Designed to mitigate risks associated with poor posture, such as back pain and musculoskeletal issues.
-*   **User-Friendly Interface:** Intuitive design ensures accessibility for all users.
-*   **Cross-Platform Compatibility:** Built using Tauri for native desktop application deployment.
+PostureGuard is a high-precision, real-time computer vision application that analyzes user posture via webcam input to provide immediate, actionable ergonomic feedback. This repository contains the full source for the cross-platform desktop client built on modern web technologies.
 
---- 
+This project represents an elite implementation of **WebAssembly-accelerated Pose Estimation** integrated seamlessly into a Tauri container, ensuring minimal latency and maximum user privacy.
 
-## 🚀 Architecture
+## 📐 Architecture Diagram
 
-PostureGuard follows a modern, modular architecture leveraging the **Apex Toolchain** for robust development.
+ascii
+                        +-------------------------+
+                        |    User Webcam Input    |
+                        +------------+------------+
+                                     |
+                                     v
+                       +--------------------------+
+                       |   Tauri Rust Core (Native) |
+                       | (Handles HW Access/IPC)  |
+                       +------------+------------+
+                                     |
+                                     v
+                       +--------------------------+
+                       |  WebGL/WebWorker (WASM)  |
+                       | (Pose Estimation Model -  |
+                       |   e.g., MediaPipe/TF.js) |
+                       +------------+------------+
+                                     |
+                                     v
+                 +----------------------------------+
+                 |      Frontend (React/Vite)         |
+                 | (State Mgmt, UI Rendering, Data) |
+                 +------------------+---------------+   (2. TypeScript Strict)
+                                    |               
+                                    v               
+                           +------------------+       (3. FSD Architecture)
+                           |   Ergonomic Feedback   |
+                           +------------------+
 
-```ascii
-PostureGuard-AI-Human-Posture-Analysis-Web-Platform
-├── src/
-│   ├── features/
-│   │   ├── posture-analysis/
-│   │   │   ├── components/
-│   │   │   ├── services/
-│   │   │   ├── hooks/
-│   │   │   └── index.ts
-│   │   ├── settings/
-│   │   │   ├── components/
-│   │   │   └── index.ts
-│   │   └── ui/
-│   │       ├── components/
-│   │       └── index.ts
-│   ├── main.ts
-│   └── App.tsx
-├── tests/
-│   ├── features/
-│   │   └── posture-analysis/
-│   │       └── services.test.ts
-│   └── utils.test.ts
-├── public/
-├── .github/
-│   ├── workflows/ci.yml
-│   ├── ISSUE_TEMPLATE/bug_report.md
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── SECURITY.md
-├── .gitignore
-├── LICENSE
-├── README.md
-├── tsconfig.json
-├── vite.config.ts
-├── biome.json
-└── package.json
-```
-
---- 
 
 ## 📚 Table of Contents
 
-*   [Features](#features)
-*   [Architecture](#architecture)
-*   [Table of Contents](#table-of-contents)
-*   [AI Agent Directives](#ai-agent-directives)
-*   [Development Setup](#development-setup)
-*   [Project Scripts](#project-scripts)
-*   [Core Principles](#core-principles)
-*   [Testing Strategy](#testing-strategy)
-*   [Contributing](#contributing)
-*   [License](#license)
-*   [Star ⭐ This Repo](#star--this-repo)
+1.  [Features](#-features)
+2.  [Technology Stack (The Apex Toolchain)](#-technology-stack-the-apex-toolchain)
+3.  [🤖 AI Agent Directives](#-ai-agent-directives)
+4.  [Development Setup](#-development-setup)
+5.  [Contribution Guidelines](#-contribution-guidelines)
+6.  [License](#-license)
 
---- 
+## ✨ Features
+
+*   **Real-Time Pose Tracking:** Utilizes advanced computer vision models to track 30+ key body landmarks instantly.
+*   **Ergonomic Scoring:** Generates a composite score based on neck angle, back curvature, and wrist positioning.
+*   **Cross-Platform Desktop:** Packaged using Tauri v2, running natively on Windows, macOS, and Linux.
+*   **Performance Optimized:** Frontend built with **Vite 7** and utilizes **Web Workers** or **WASM** to offload heavy computation from the main thread.
+*   **Strict Typing:** Enforced using **TypeScript** across the entire codebase to eliminate runtime surprises.
+
+## ⚙️ Technology Stack (The Apex Toolchain)
+
+| Category | Technology | Rationale |
+| :--- | :--- | :--- |
+| **Core Framework** | React (v19+) | Component-based UI architecture. |
+| **Bundling** | Vite 7 | Sub-millisecond HMR and rapid build times. |
+| **Desktop Runtime** | Tauri v2 | Modern, secure, and small binary footprint. |
+| **Language** | TypeScript (Strict Mode) | Enforcing 100% type safety. |
+| **Styling** | TailwindCSS v4 | Utility-first, highly maintainable styling. |
+| **Linting/Formatting** | Biome | Unifying linting, formatting, and static analysis speed. |
+| **Testing** | Vitest (Unit) / Playwright (E2E) | Comprehensive verification strategy. |
+| **Architecture** | Feature-Sliced Design (FSD) | Ensuring scalable and decoupled application layers. |
 
 ## 🤖 AI Agent Directives
 
 <details>
-  <summary>Click to expand AI Agent Directives</summary>
+<summary><strong>Apex Architectural Alignment & Verification Commands</strong></summary>
 
-### 1. IDENTITY & PRIME DIRECTIVE
-**Role:** Senior Principal Software Architect, Master Technical Copywriter, and DevOps Strategist.
-**Context:** Current Date is **December 2025**. Building for the 2026 standard.
-**Output Standard:** **EXECUTION-ONLY** results. No plans, only executed code, updated docs, and applied fixes.
-**Philosophy:** "Zero-Defect, High-Velocity, Future-Proof."
+### **A. Core Principles & Architecture Mandate**
 
-### 2. AI ORCHESTRATION & GEMINI PROTOCOL (LATE 2025)
-*   **Tier 1:** `gemini-3-pro-preview` (Nov 2025)
-*   **Tier 2:** `gemini-2.5-pro` (Stable)
-*   **Tier 3:** `gemini-2.5-flash` (Stable)
-*   **Tier 4:** `gemini-2.5-flash-lite-preview-09-2025`
-*   **Tier 5:** `gemini-2.0-flash`, `gemini-2.5-flash-native-audio-preview-09-2025`
-*   **Circuit Breaker:** Fallback on 429/500 errors.
+1.  **SOLID Compliance:** All application services (e.g., `PostureService`, `DataPersistor`) must rigorously adhere to the **Single Responsibility Principle (SRP)**. Dependency Injection patterns are mandatory for complex components.
+2.  **DRY Enforcement:** Abstract common UI patterns (e.g., ScoreDisplay) into reusable FSD *shared* layers.
+3.  **YAGNI Protocol:** Only implement features explicitly required by the current roadmap. Avoid premature abstraction in the computational pipeline.
+4.  **FSD Structure:** Strict adherence to the Feature-Sliced Design pattern:
+    *   `app/` (App initialization, layout)
+    *   `processes/` (High-level user flows)
+    *   `pages/` (Routing targets)
+    *   `widgets/` (Reusable UI components tied to specific features)
+    *   `features/` (Business logic implementations)
+    *   `entities/` (Data models and core domain objects)
+    *   `shared/` (Primitives, generic utilities, UI elements).
 
-### 3. CONTEXT-AWARE APEX TECH STACKS (LATE 2025 STANDARDS)
-**Project Type:** Web Application / Desktop Application (Tauri)
-**Apex Toolchain:**
-*   **Language:** **TypeScript 6.x** (Strict)
-*   **Bundler/Build:** **Vite 7** (Rolldown)
-*   **Native Integration:** **Tauri v2.x**
-*   **State Management:** **Signals** (Standardized)
-*   **Lint/Format:** **Biome**
-*   **Testing:** **Vitest** (Unit), **Playwright** (E2E)
+### **B. Technology Stack & Verification**
 
-### 4. RECURSIVE PERFECTION LOOP (THE "ZERO-ERROR" MANDATE)
-**Process:** Analyze -> Fix -> Lint/Format -> Test -> Decision Gate -> Iterate until Clean -> Commit.
-**Constraint:** **DO NOT STOP** until the build is perfectly clean.
+*   **Language Standard:** TypeScript 6.x targeting ES2022+. Strict mode is enabled in `tsconfig.json`.
+*   **Linter/Formatter:** **Biome** is the sole arbiter of code style. All commits must pass `biome check --apply`.
+*   **Testing Strategy:**
+    *   **Unit Tests (`*.test.ts`):** Cover all `entities/` and `shared/` logic using **Vitest**.
+    *   **Integration/E2E Tests:** Cover the complete user journey (webcam access request -> posture analysis -> feedback display) using **Playwright**.
 
-### 5. CORE ARCHITECTURAL PRINCIPLES
-*   **SOLID MANDATE:** SRP, OCP, LSP, ISP, DIP.
-*   **MODULARITY:** Feature-First Structure (`features/feature-name`).
-*   **CQS:** Methods are Commands (Action) or Queries (Data), never both.
-*   **12-Factor App:** Configuration in environment.
+### **C. Self-Correction and Future-Proofing**
 
-### 6. CODE HYGIENE & STANDARDS
-*   **SEMANTIC NAMING:** Descriptive Verbs, `camelCase` (JS/TS).
-*   **CLEAN CODE:** Verticality, Guard Clauses, DRY, KISS, Self-Documenting Code.
-
-### 7. RELIABILITY, SECURITY & SUSTAINABILITY
-*   **DEVSECOPS:** Zero Trust Input Sanitization (OWASP Top 10 2025), SBOMs, Fail Fast, Encryption.
-*   **EXCEPTION HANDLING:** Never crash, `try-catch-finally`, Retry Logic.
-*   **GREEN SOFTWARE:** Rule of Least Power, Efficiency, Lazy Loading.
-
-### 8. COMPREHENSIVE TESTING STRATEGY
-*   **FOLDER SEPARATION:** Production code in `src/`, tests in `tests/`.
-*   **TESTING PYRAMID:** Fast, Isolated, Repeatable.
-*   **COVERAGE MANDATE:** 1:1 mapping, Scenario Coverage (Success, Failure, Edge Cases), Zero Console Errors.
-
-### 9. UI/UX AESTHETIC SINGULARITY (2026 STANDARD)
-*   **VISUAL LANGUAGE:** Liquid Glass + Neo-Brutalist + Material You 3.0.
-*   **MOTION:** Mandatory fluid animations (`transition: all 0.2s`).
-*   **PERFORMANCE UX:** INP < 200ms, Optimistic UI.
-*   **INTERACTION DESIGN:** Hyper-Personalization, Micro-interactions.
-*   **HYPER-CONFIGURABILITY:** User-configurable settings.
-
-### 10. DOCUMENTATION & VERSION CONTROL
-*   **HERO-TIER README:** BLUF, Live Sync, Visuals, AI Replication Block, Social Proof.
-*   **ADVANCED GIT:** Context Archaeology, Conventional Commits, Semantic Versioning.
-
-### 11. AUTOMATION SINGULARITY (GITHUB ACTIONS)
-*   **Workflows:** Integrity (Lint/Test), Security (Audit/SBOM), Release (Versioning/Artifacts), Dependencies (Auto-merge).
-
-### 12. THE ATOMIC EXECUTION CYCLE
-**Loop:** Audit -> Research -> Plan -> Act -> Automate -> Docs -> Verify -> REITERATE -> Commit.
+*   **Dependency Management:** Use `npm` and lock files must be committed. Future upgrades (e.g., Tauri v3, React 20) should be managed via the `scripts/upgrade.sh` (hypothetical) or by performing a clean audit via `npm outdated` followed by manual review.
+*   **Performance Goal:** Latency from frame capture to UI update must remain under 100ms on modern hardware.
 
 </details>
 
---- 
+## 🚀 Development Setup
 
-## ⚙️ Development Setup
+This repository uses **TypeScript**, **Vite**, and **Tauri**. Ensure Node.js (v20+) and Rust toolchain are installed.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/PostureGuard-AI-Human-Posture-Analysis-Web-Platform.git
-    cd PostureGuard-AI-Human-Posture-Analysis-Web-Platform
-    ```
+### Prerequisites
 
-2.  **Install Dependencies:**
-    ```bash
-    npm install
-    # or for yarn users:
-    # yarn install
-    ```
+1.  **Node.js & npm/pnpm/uv:** Install Node.js LTS (or higher).
+2.  **Rust Toolchain:** Install via `rustup`.
 
-3.  **Run the development server:**
-    ```bash
-    npm run dev
-    # or for yarn users:
-    # yarn dev
-    ```
-    This will start the Vite development server with Hot Module Replacement (HMR).
+### Installation Steps
 
-4.  **Build for production:**
-    ```bash
-    npm run build
-    # or for yarn users:
-    # yarn build
-    ```
-    This command creates an optimized build in the `dist` folder, ready for Tauri packaging.
+bash
+# 1. Clone the repository
+git clone https://github.com/chirag127/PostureGuard-AI-Posture-Correction-Web-App.git
+cd PostureGuard-AI-Posture-Correction-Web-App
 
-5.  **Run Tauri commands (requires Tauri CLI installed globally):**
-    ```bash
-    # Build and run for desktop (e.g., Windows, macOS, Linux)
-    npm run tauri:build
-    npm run tauri:dev
-    ```
+# 2. Install Dependencies (Using npm for web stack simplicity)
+npm install
 
---- 
+# 3. (Tauri Requirement) Ensure Rust dependencies are built
+npm run tauri:build  # Or just run dev first
 
-## 📜 Project Scripts
 
-| Script                | Description                                                                 |
-| :-------------------- | :-------------------------------------------------------------------------- |
-| `dev`                 | Start the Vite development server with HMR.                                 |
-| `build`               | Build the Vite application for production.                                  |
-| `preview`             | Preview the production build locally.                                       |
-| `lint`                | Run Biome linter and formatter.                                             |
-| `lint:fix`            | Fix linting and formatting issues with Biome.                               |
-| `test`                | Run all unit and integration tests with Vitest.                             |
-| `test:e2e`            | Run end-to-end tests with Playwright.                                       |
-| `tauri:dev`           | Run the application in development mode with Tauri.                         |
-| `tauri:build`         | Build the Tauri desktop application.                                        |
-| `tauri:icon`          | Generate app icons for various platforms.                                   |
-| `generate:sbom`       | Generate Software Bill of Materials (SBOM).                                 |
+### Available Scripts
 
---- 
+| Command | Description | Apex Standard |
+| :--- | :--- | :--- |
+| `npm run dev` | Starts the development server with HMR (Vite). | High-Velocity Development |
+| `npm run tauri:dev` | Builds and runs the Tauri desktop application. | Native Environment Test |
+| `npm run build` | Creates optimized production builds for Web/Tauri. | Zero-Defect Release Candidate |
+| `npm run lint` | Runs Biome check across TypeScript and CSS files. | Static Analysis Enforcement |
+| `npm run test:unit` | Runs Vitest unit tests. | Logic Integrity Verification |
+| `npm run test:e2e` | Runs Playwright end-to-end scenarios. | User Journey Validation |
 
-## 💡 Core Principles
+## 🤝 Contribution Guidelines
 
-This project adheres to the following software engineering principles:
+Contributions are welcome following the **Zero-Defect, High-Velocity** mandate. Please review the dedicated `.github/CONTRIBUTING.md` file for detailed procedures on commit etiquette, PR templates, and branch naming conventions.
 
-*   **SOLID:** Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.
-*   **DRY (Don't Repeat Yourself):** Avoid code duplication.
-*   **KISS (Keep It Simple, Stupid):** Favor straightforward solutions.
-*   **CQS (Command Query Separation):** Methods either perform an action or return data, not both.
-*   **12-Factor App:** Configuration externalized, statelessness, immutability.
-*   **Feature-First Modularity:** Organize code by features, not by layers or types.
+All contributions must pass CI checks defined in `.github/workflows/ci.yml`.
 
---- 
+## 🛡️ Security
 
-## 🧪 Testing Strategy
-
-PostureGuard employs a comprehensive testing strategy to ensure reliability and quality:
-
-*   **Unit Tests:** Isolated tests for individual functions and components using [Vitest](https://vitest.dev/). Found in the `tests/` directory, mirroring the `src/` structure.
-*   **End-to-End (E2E) Tests:** Simulate user interactions with the application using [Playwright](https://playwright.dev/). Ensures the complete user flow functions as expected.
-*   **Code Coverage:** Aiming for 100% coverage, with reports generated by [Codecov](https://codecov.io/) via GitHub Actions.
-*   **Zero Console Errors:** The application must run without any JavaScript console errors in both development and production builds.
-
---- 
-
-## 🤝 Contributing
-
-We welcome contributions! Please see the [CONTRIBUTING.md](.github/CONTRIBUTING.md) file for detailed guidelines on how to submit bug reports, feature requests, and pull requests.
-
---- 
+Security is paramount, especially when handling webcam input locally. Refer to `.github/SECURITY.md` for reporting vulnerabilities. This application strictly adheres to local-only processing principles; **no raw video data leaves the user's machine**.
 
 ## 📄 License
 
-This project is licensed under the **CC BY-NC 4.0** license. See the [LICENSE](LICENSE) file for more details.
-
---- 
-
-## ⭐ Star This Repo
-
-If you find PostureGuard valuable, please consider starring ⭐ this repository. Your support encourages further development and helps the project gain visibility!
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License**. See the `LICENSE` file for full details.
