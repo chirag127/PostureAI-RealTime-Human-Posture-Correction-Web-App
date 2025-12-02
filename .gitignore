@@ -1,54 +1,42 @@
-# General
-.env
-.env.*
-!.env.example
-
-# Node / npm / Yarn / pnpm
+# Compiled files and output directories
+build/
+dist/
+.output/
 node_modules/
+*.local
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Build output
-dist/
-build/
-out/
-
-# Vite / Rollup
-.vite/
-*.log
-
-# IDE / Editor specific
-.vscode/
-.idea/
-*.swp
-*.swo
 
 # OS generated files
 .DS_Store
 Thumbs.db
 
-# Testing
-coverage/
-*.test*
-*.spec*
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
 
-# Tauri (if applicable)
-.tauri/
+# Build artifacts and temporary files for Tauri
 src-tauri/target/
 
-# Logs
-*.log
-logs/
+# Vite specific files
+.vite/
 
-# Temporary files
-*.tmp
+# Biome cache
+.biome/
 
-# Secrets (DO NOT COMMIT)
-credentials.json
-secrets.yaml
-api_keys.env
+# Testing artifacts
+coverage/
+*.test*
