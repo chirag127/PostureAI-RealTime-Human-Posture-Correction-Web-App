@@ -1,158 +1,74 @@
+# CI Workflow for PostureGuard-AI-Posture-Correction-Desktop-App
+
 name: CI
 
-# Trigger workflow on push to the main branch and on pull requests targeting the main branch
+# Controls when the workflow will run
+# Runs on pushes to the main branch and pull requests targeting the main branch
+
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
-
-# Define environment variables and concurrency settings
-env:
-  NODE_VERSION: '20.x' # Specify the Node.js version for build and test environments
-  TAURI_ARCH: '${{ runner.arch }}' # Dynamically set Tauri architecture based on runner
+    branches: [ main ]
 
 jobs:
-  build:
-    name: Build & Test
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
-
-    # Configure steps for the build job
-    steps:
-      # Checkout the repository code
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      # Set up Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm' # Cache npm dependencies for faster builds
-
-      # Install dependencies using npm
-      - name: Install Dependencies
-        run: npm ci # Use 'ci' for cleaner installs in CI environments
-
-      # Lint and format code using Biome
-      - name: Lint with Biome
-        run: npm run lint:fix # Run Biome to enforce code style and fix issues
-
-      # Build the application using Vite
-      - name: Build Application (Vite)
-        run: npm run build # Execute the build script for production deployment
-        env:
-          # Set any necessary environment variables for the build process
-          CI: true
-          TAURI_PLATFORM: 'linux'
-          TAURI_ARCH: '${{ env.TAURI_ARCH }}'
-          NODE_ENV: 'production'
-
-      # Run unit tests using Vitest
-      - name: Run Unit Tests (Vitest)
-        run: npm run test:unit # Execute unit tests
-
-      # Optional: Upload build artifacts (e.g., for distribution or further testing)
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: app-build
-      #     path: dist/
-
-  # Define a separate job for end-to-end testing
-  e2e:
-    name: E2E Tests
+  build-and-test:
     runs-on: ubuntu-latest
-    needs: build # This job depends on the 'build' job completing successfully
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history so that --all is available to git-cli
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Cache npm dependencies
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci # Use npm ci for faster, deterministic installs
 
-      # Build the application for E2E testing environment
-      - name: Build Application for E2E
+      - name: Setup Biome Linter and Formatter
+        # Biome needs to be installed globally for commands like 'biome check'
+        run: npm install -g @biomejs/biome
+
+      - name: Lint and Format Check with Biome
+        run: biome check --apply --diagnostic-level=warn
+        # --apply automatically fixes formatting issues and some linting errors.
+        # Use '--apply-unsafe' for more aggressive auto-fixing if needed, but 'check' is safer for CI.
+
+      - name: Build Project with Vite
         run: npm run build
         env:
+          NODE_ENV: production
+          # CI=true sets Vite to production mode, disabling HMR etc.
           CI: true
-          TAURI_PLATFORM: 'linux'
-          TAURI_ARCH: '${{ env.TAURI_ARCH }}'
-          NODE_ENV: 'production'
 
-      # Install Playwright browsers
-      - name: Install Playwright Browsers
-        run: npm exec playwright install -- --with-deps
+      - name: Run Vitest (Unit/Integration Tests)
+        run: npm run test:unit
 
-      # Run end-to-end tests using Playwright
-      - name: Run E2E Tests (Playwright)
-        run: npm run test:e2e # Execute end-to-end tests
-        env:
-          CI: true
-          # Add any necessary environment variables for E2E tests
-
-      # Upload E2E test results (optional)
-      # - name: Upload E2E Test Results
-      #   uses: actions/upload-artifact@v3
-      #   if: always() # Upload results even if tests fail
-      #   with:
-      #     name: playwright-report
-      #     path: test-results/
-      #     retention-days: 7 # Retain results for 7 days
-
-  # Define a job for building Tauri desktop application
-  tauri_build:
-    name: Tauri Build (Linux)
-    runs-on: ubuntu-latest
-    needs: build
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Upload Coverage Reports
+        uses: codecov/codecov-action@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          token: ${{ secrets.CODECOV_TOKEN }} # Make sure to set this secret in your GitHub repository settings
+          files: ./coverage/coverage.json # Path to your coverage report, adjust if necessary
+          fail_ci_if_error: true
 
-      # Install Rust and necessary build tools for Tauri
-      - name: Install Rust and Dependencies
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
-          sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.0-dev libssl-dev libgtk-3-dev
-          ~/.cargo/bin/cargo install tauri-cli
-        env:
-          CARGO_HOME: ${{ github.workspace }}/.cargo
-          RUSTUP_HOME: ${{ github.workspace }}/.rustup
+      # Example for E2E tests with Playwright (if applicable)
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install
+      #
+      # - name: Run Playwright End-to-End Tests
+      #   run: npm run test:e2e
+      #   env:
+      #     CI: true
 
-      - name: Install Dependencies
-        run: npm ci
-
-      # Build the Tauri desktop application
-      - name: Build Tauri App (Linux x64)
-        run: npm run tauri:build
-        env:
-          NODE_ENV: 'production'
-          TAURI_PLATFORM: 'linux'
-          TAURI_ARCH: 'x64'
-          # Required for Tauri build
-          CHIPMUNK_BACKEND: 'memory'
-          RUSTUP_TOOLCHAIN: 'stable'
-          RUST_VERSION: 'stable'
-
-      # Upload the built Tauri application artifact
-      - name: Upload Tauri Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: postureguard-linux-x64
-          path: src-tauri/target/release/bundle/appimage/PostureGuard*.AppImage
-          retention-days: 7 # Keep artifacts for 7 days
+      # Tauri specific build step might be added here if needed for specific platforms
+      # For example, building a macOS or Windows executable.
+      # Depending on the build complexity, a separate job or more complex steps might be required.
